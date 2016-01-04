@@ -11,10 +11,14 @@ defmodule Rumbl.Auth do
 
   def call(conn, repo) do
     user_id = get_session(conn, :user_id)
-    if user = user_id && repo.get(Rumbl.User, user_id) do
-      put_current_user(conn, user)
-    else
-      assign(conn, :current_user, nil)
+
+    cond do
+      user = conn.assigns[:current_user] ->
+        put_current_user(conn, user)
+      user = user_id && repo.get(Rumbl.User, user_id) ->
+        put_current_user(conn, user)
+      true ->
+        assign(conn, :current_user, nil)
     end
   end
 
@@ -44,7 +48,7 @@ defmodule Rumbl.Auth do
   end
 
   def authenticate_user(conn, _opts) do
-    if conn.assigns.current_user do
+    if conn.assigns[:current_user] do
       conn
     else
       conn

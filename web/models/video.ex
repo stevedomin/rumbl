@@ -16,7 +16,7 @@ defmodule Rumbl.Video do
   end
 
   @required_fields ~w(url title description)
-  @optional_fields ~w(category_id)
+  @optional_fields ~w(user_id category_id)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
